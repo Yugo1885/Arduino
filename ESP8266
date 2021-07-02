@@ -31,7 +31,8 @@ void setup() {
   // 使用SSID 跟 password 連線基地台
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  WiFi.begin(ssid, password);
+  WiFi.begin(ssid, password); //開始連線
+  //直到連線成功，否則迴圈內持續印出...
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -40,8 +41,8 @@ void setup() {
   Serial.println("");
   Serial.println("WiFi connected.");
   Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-  server.begin();
+  Serial.println(WiFi.localIP()); //列印出此伺服器被分配到的區域IP
+  server.begin(); //伺服器啟動
 }
 
 void loop(){
@@ -93,7 +94,7 @@ void loop(){
             // 網頁表頭
             client.println("<body><h1>ESP8266 Web Server</html>");
             
-            // 顯示現在GPIO 5 按鈕的狀態是 ON/OFF  
+            // 顯示現在GPIO 2 按鈕的狀態是 ON/OFF  
             client.println("<p>GPIO 2 - State " + output2State + "</p>");
 
             // 按鈕假使狀態是 off, 就要顯示 ON        
