@@ -7,7 +7,7 @@ void setup()
   display.setIntensity(0,1); // sets brightness (0~15 possible values)
   display.clearDisplay(0); // clear screen
 }
-const uint64_t IMAGES[] = {
+const uint64_t IMAGES[] = { //Inky
   0xdbffffc3ffdb7e3c,
   0xb6fefe86feb6fc78,
   0x6cfcfc0cfc6cf8f0,
