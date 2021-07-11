@@ -1,0 +1,30 @@
+#include <ESP8266WiFi.h>
+#include <PubSubClient.h> //this library allows us to publish or subscribe messages in topic
+const char* ssid="48y104298";
+const char* password="048790627";
+const char* mqttServer="";
+const int mqttPort=
+const char* mqttUser=;
+const char* mqttPassword=""
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin(ssid, password);
+  whlie(WiFi.status()!=WL_CONNECTED){
+    delay(500);
+    Serial.println("Connecting to WiFi...");
+  }
+  Serial.println("Connected to the WiFi network");
+
+  while(!client.connected()){
+    Serial.println("Connecting to MQTT...");
+    if(client.connect("ESP8266Client", mqttUser, mqttPassword)){
+      Serial.println("connected");
+    }else{
+
+      Serial.print("failed with state");
+      Serial.print(client.state());
+      delay(2000);
+    }
+  }
+}
