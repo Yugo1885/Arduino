@@ -11,8 +11,8 @@ const char* mqttUser="mqtt";
 const char* mqttPassword="password";
 const int mqttPort=1883;
 
-WiFiClient espClient;
-PubSubClient client(espClient);
+WiFiClient espClient; //建立用戶端可連接的特定網路IP位址與Port
+PubSubClient client(espClient); //自訂mqtt用戶端物件名稱
 
 void setup() {
   Serial.begin(115200);
