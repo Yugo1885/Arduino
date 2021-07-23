@@ -1,112 +1,44 @@
 #include <ESP8266WiFi.h>
-#include <WiFiClient.h>
+#include <ThingSpeak.h>
+//WiFi
+const char* ssid="******";
+const char* password="******";
 
+WiFiClient client;
 
-#define photoPin  2
+//ThingSpeak
+unsigned long myChannelNumber=*;
+const char* myWriteAPIKey="******";
 
-// 設定網路基地台SSID跟密碼
-const char* ssid      = "MyHome";
-const char* password  = "12345678";
+//Time variables
+unsigned long lasttime=0;
+unsigned long timerDelay=30000; //publishinig readings every 30s
 
-// 請更換成 Thing Speak WRITE API KEY
-const char* apiKey = "AB4CDEFG4HI5J3KL";
-const char* resource = "/update?api_key=";
+float photocell;
+anologReak=pin2
 
-// Thing Speak API server 
-const char* server = "api.thingspeak.com";
-
-photoVal=analogRead(photoPin);
-
-
-unsigned long previousMillis = 0;        // will store last temp was read
-const long interval = 2000;              // interval at which to read sensor
-
-void setup() {
-  // Initializing serial port for debugging purposes
-  Serial.begin(9600);
-  delay(10);
-
-  Serial.println("");
-  Serial.println("");
-  Serial.print("Connecting To: ");
-  Serial.println(ssid);
-  WiFi.begin(ssid, password);
-
-  // 等待連線，並從 Console顯示 IP
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-
-  Serial.println("");
-  Serial.println("WiFi Connected.");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-
+void setup(){
+  Serial.begin(115200);
+  //Set the ESP8266 as a WiFi station
+  WiFi.mode(WIFI_STA);
+  //Initialize ThingSpeak
+  ThingSpeak.begin(client);
 }
 
-void loop() {
-  // sleeping so wont get here
-  // 量測間等待至少 2 秒
-  unsigned long currentMillis = millis();
- 
-  if(currentMillis - previousMillis >= interval) {
-    // 將最後讀取感測值的時間紀錄下來 
-    previousMillis = currentMillis;   
-
-    // 讀取大約 250 微秒!
-    phtotsensor = analogRead(photoPin);          // 讀取光敏
-    
-    
-    // 檢查值是否為空值
-    if (isnan(phtotsensor)) {
-       Serial.println("Failed to read from phtotsensor!");
-       return;
+void.loop(){
+  //Connect or reconnect WiFi
+  if(wiFi.status()!=WL_CONNECTED){
+    Serial.print("Attempting to connect");
+    while(WiFi.status()!=WL_CONNECTED){
+      WiFi.begin(ssid,password);
+      delay(5000);
+     }
+     Serial.println("\nConnected.");
     }
-  }
-
-  Serial.println(photosensor);
-
-
-
-
-  // 除錯用
-
-  Serial.print("Connecting to "); 
-  Serial.print(server);
-  WiFiClient client;
-
-  // 使用 80 Port 連線
-  if (client.connect(server, 80)) {
-    Serial.println(F("connected"));
-  } 
-  else  {
-    Serial.println(F("connection failed"));
-    return;
-  }
-   
-  Serial.print("Request resource: "); 
-  Serial.println(resource);
-  client.print(String("GET ") + resource + apiKey + "&field1=" + tempe + "&field2=" + humidity +
-                  " HTTP/1.1\r\n" +
-                  "Host: " + server + "\r\n" + 
-                  "Connection: close\r\n\r\n");
-                  
-  int timeout = 5 * 10; // 5 seconds             
-  while(!!!client.available() && (timeout-- > 0)){
-    delay(100);
-  }
-  
-  if(!client.available()) {
-     Serial.println("No response, going back to sleep");
-  }
-  while(client.available()){
-    Serial.write(client.read());
-  }
-  
-  Serial.println("\nclosing connection");
-  client.stop();
-
-  // 每十秒會上傳一筆資料
-  delay(10000);
+    
+//Get a new reading
+photocell=
+Serial.print("阻值:");
+Serial.println(photocell);
 }
+
