@@ -14,8 +14,8 @@ const char* myWriteAPIKey="******";
 unsigned long lasttime=0;
 unsigned long timerDelay=30000; //publishinig readings every 30s
 
-float photocell;
-anologReak=pin2
+int photocellPin=2;
+analogRead(photocellPin);
 
 void setup(){
   Serial.begin(115200);
@@ -37,8 +37,8 @@ void.loop(){
     }
     
 //Get a new reading
-photocell=
+photocellVal=
 Serial.print("阻值:");
-Serial.println(photocell);
+Serial.println(photocellVal);
 }
 
