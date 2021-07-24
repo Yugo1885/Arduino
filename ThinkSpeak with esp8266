@@ -1,18 +1,20 @@
 #include <ESP8266WiFi.h>
 #include <ThingSpeak.h>
 //WiFi
-const char* ssid="******";
-const char* password="******";
+const char* ssid="48y104298";
+const char* password="048790627";
 
 WiFiClient client;
 
 //ThingSpeak
 unsigned long myChannelNumber=1;
-const char* myWriteAPIKey="******";
+const char* myWriteAPIKey="GXIRRTPJ1C0LLRVJ";
 
 //Time variables
 unsigned long lasttime=0;
-unsigned long timerDelay=30000; //publishinig readings every 30s
+unsigned long timerDelay=5000; //publishinig readings every 5s
+
+
 
 void setup(){
   Serial.begin(115200);
@@ -37,5 +39,17 @@ void loop(){
 int photocellVal=analogRead(2);
 Serial.print("阻值:");
 Serial.println(photocellVal);
+
+ThingSpeak.setField(1, photocellVal);
+
+int x = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
+
+    if(x == 200){
+      Serial.println("Channel update successful.");
+    }
+    else{
+      Serial.println("Problem updating channel. HTTP error code " + String(x));
+    }
+    lasttime = millis();
 }
 
