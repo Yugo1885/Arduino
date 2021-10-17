@@ -23,7 +23,7 @@ float duration;
 float distance_cm;
 
 
-digitalWrite(trigPin, LOW); //PULSE ___|---|___
+digitalWrite(trigPin, LOW); //PULSE
 delayMicroseconds(2);
 digitalWrite(trigPin, HIGH);
 delayMicroseconds(10);
@@ -31,7 +31,7 @@ digitalWrite(trigPin, LOW);
  
 duration = pulseIn(echoPin, HIGH);
  
-distance_cm = (duration/2) / 29.4;
+distance_cm = (duration/2) / 29.1; //聲波距離公式
  
 display.setCursor(10,10); //oled display
 display.setTextSize(2);
