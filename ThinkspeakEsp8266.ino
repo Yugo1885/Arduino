@@ -1,14 +1,14 @@
 #include <ESP8266WiFi.h>
 #include <ThingSpeak.h>
 //WiFi
-const char* ssid="48y104298";
-const char* password="048790627";
+const char* ssid="yourssid";
+const char* password="yourpassword";
 
 WiFiClient client;
 
 //ThingSpeak
 unsigned long myChannelNumber=1;
-const char* myWriteAPIKey="GXIRRTPJ1C0LLRVJ";
+const char* myWriteAPIKey="yourAPIKey";
 
 //Time variables
 unsigned long lasttime=0;
