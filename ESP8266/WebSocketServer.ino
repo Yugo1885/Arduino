@@ -137,8 +137,9 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
       break;
 }
 
-void initWebSocket() {
-  
+void initWebSocket() { //每當有WebSocket訊息(onEvent)傳入，自動執行此回呼函式
+  ws.onEvent(onEvent); //附加事件處理程式
+  server.aadHandler(&ws); //將WebSocket物件附加(傳址)給伺服器物件
 }
 
 String processor(){
