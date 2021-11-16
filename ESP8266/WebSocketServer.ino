@@ -22,6 +22,44 @@ AsyncWebSocket ws("/ws"); //建立AsyncWebSocket物件名為ws，處理/ws路徑
 
 //Web Page(html, css, javascript)
 const char index_html[] PROGMEM = R"rawliteral(
+<!DOCTYPE HTML><html>
+<head>
+  <title>ESP Web Server</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    h2{
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #143642;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h1>ESP WebSocket Server</h1>
+    <div class="content">
+  </div> 
+  
+  <div>
+    <h2>OUtput -GPIO 2</h2>
+    <p>state:<span id="state">%STATE%</span></p>
+    <p><button id="button" class="button">Toggle</button></p>
+  </div>
+  
+  <div>
+    <span>Temperature</span>
+    <span id="temperature">%TEMPERATURE%</span>
+  </div>
+  
+  <div>
+    <span>Humudity</span>
+    <span id="humudity>%HUMUDITY%</span>
+  </div>
+</body>
+<script>
+  var websocket;
+</script>
+</html>
 )rawliteral";
 
 //Notify All Clients
@@ -58,9 +96,10 @@ void setup() {
   digitalWrite(ledPin, LOW);
   
   WiFi.begin(ssid, password);
+  Serial.println("Connecting to WiFi");
   while(WiFi.status()!=WL_CONNECTED) {
     delay(1000);
-    Serial.println("Connecting to WiFi...");
+    Serial.println(".");
   }
   
   Serial.print("ESP Local IP Address: ");
