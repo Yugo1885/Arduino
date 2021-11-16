@@ -17,8 +17,8 @@ const char* password = "your_wifi_password";
 bool ledState = 0;
 const int ledPin =2;
 
-AsyncWebServer server(80); //建立AsyncWebServer物件在80埠
-AsyncWebSocket ws("/ws"); //建立AsyncWebSocket物件名為ws，處理/ws路徑上的連接
+AsyncWebServer server(80); //建立HTTP伺服器物件
+AsyncWebSocket ws("/ws"); //建立WebSocket物件，/ws為自訂的路徑
 
 //Web Page(html, css, javascript)
 const char index_html[] PROGMEM = R"rawliteral(
@@ -27,6 +27,9 @@ const char index_html[] PROGMEM = R"rawliteral(
   <title>ESP Web Server</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    h1{
+      font-size: 1.8rem;
+      color: white;
     h2{
       font-size: 1.5rem;
       font-weight: bold;
@@ -57,7 +60,44 @@ const char index_html[] PROGMEM = R"rawliteral(
   </div>
 </body>
 <script>
+  //window.location.hostname抓取目前網頁IP位址
+  var gateway =`ws://${window.location.hostname}/ws`; //It is the entry point to the WebSocket interface
   var websocket;
+  function initWebSocket() { //初始化前面所定義閘道器(gateway)的WebSocket connection，並指定數個回呼函數
+    console.log('Trying to open a WebSocket connection...');
+    websocket = new WebSocket(gateway);
+    websocket.onopen = onOpen; //當WebSocket connection開通，關閉或訊息接收
+    websocket.onclose = onClose;
+    websocket.onmessage = onMessage; 
+  }
+  function onOpen(event) {
+    console.log('Connection opened');
+    websocket.send('Hi'); //為了確認連結是否初始化
+  }  
+  function onClose(event) {
+    console.log('Connection closed');
+    setTimeout(initWebSocket, 2000); //當連接意外斷開時，過2秒後再呼叫initWebSocket()
+  }
+  function onMessage(event) {
+    var state;
+    if(event.data == "1"){
+      state = "ON";
+    }
+    else{
+      state = "OFF";
+    }
+    document.getElementById('state').innerHTML = state;
+  }
+  function onLoad(event) {
+    initWebSocket();
+    initButton();
+  }
+  function initButton() { //When you click the button, the toggle function is called.
+    document.getElementById('button').addEventListener('click',toggle);
+  }
+  function toggle() { //透過WebSocket connection傳送帶有"toggle"文本的訊息
+    websocket.send('toggle');
+  }
 </script>
 </html>
 )rawliteral";
@@ -79,10 +119,26 @@ void handleWebSocketMessage(void *arg, unit8_t *data, size_t len) {
   }
 }
 
-void onEvent(){
+void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type, void *arg, unit8_t *data, size_t len){
+  //接收WebSocket資料的程式
+  switch(type) {
+    case WS_EVT_CONNECT: //有個新用戶連接
+      //從client物件取得用戶端IP位址(remoteIP)和編號(id)
+      Serial.printf("WebSocket client #%u connected form %s\n", client->id(), client->remoteIP().toString().c_str());
+      break;
+    case WS_EVT_DISCONNECT: //有個用戶端離線
+      Serial.printf("用戶%u 已離線\n", client->id());
+      break;
+    case WS_EVT_DATA: //用戶端傳入資料
+      Serial.printf("用戶%u 傳入資料: %s\n", client->id(), (char *)data);
+      break;
+    case WS_EVT_PONG: //回應ping請求
+    case WS_EVT_ERROR: //收到錯誤訊息
+      break;
 }
 
 void initWebSocket() {
+  
 }
 
 String processor(){
@@ -117,7 +173,7 @@ void setup() {
 }
 
 void loop() {
-  ws.cleanupClients();
+  ws.cleanupClients(); //清理用戶端
   digitalWrite(ledPin, ledState);
 }
   
