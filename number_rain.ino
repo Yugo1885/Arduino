@@ -1,3 +1,17 @@
+//使用配置到 User_Setup.h中更改//
+/*
+  #define ST7735_DRIVER 
+  #define TFT_RGB_ORDER TFT_RGB
+  #define TFT_WIDTH  128
+  #define TFT_HEIGHT 160
+  #define TFT_MISO  PIN_D6  // Automatically assigned with ESP8266 if not defined
+  #define TFT_MOSI  PIN_D7  // Automatically assigned with ESP8266 if not defined
+  #define TFT_SCLK  PIN_D5  // Automatically assigned with ESP8266 if not defined
+  
+  #define TFT_CS    PIN_D8  // Chip select control pin D8
+  #define TFT_DC    PIN_D3  // Data Command control pin
+  #define TFT_RST   PIN_D4
+*/
 #include <TFT_eSPI.h>
 
 TFT_eSPI tft = TFT_eSPI();
